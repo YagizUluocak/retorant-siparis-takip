@@ -20,4 +20,9 @@ abstract class AbstractModel{
         $stmt->execute();
         return $stmt->fetch();
     }
+    public function deleteById($id){
+        $stmt = $this->db->prepare("DELETE FROM " . $this->table . " WHERE " . $this->table . "_id = :id");
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 }
