@@ -25,4 +25,17 @@ abstract class AbstractModel{
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+
+    /* Tek bir method üzerinden veri Ekleme 
+    public function addItem($table, $columns, $values)
+    {
+
+        $columnStr = implode(', ', $columns);
+        $paramStr = ':' . implode(', :', $columns); // :table_id, :product_name, :price ....
+
+        $stmt = $this->db->prepare("INSERT INTO " . $table . "(" . $columnStr . ") VALUES ( " . $paramStr . ")" );
+        $ParamArray = array_combine($columns , $values);
+        $stmt->execute($ParamArray);
+    }
+    */
 }

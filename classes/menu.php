@@ -13,7 +13,7 @@ class Menu extends AbstractModel{
         $this->product = htmlspecialchars($_POST['product']);
         $this->category = htmlspecialchars($_POST['category']);
         $this->price = filter_var($_POST['price'], FILTER_VALIDATE_FLOAT);
-
+        
         if(!$this->price){
             echo "Geçersiz Fiyat Değeri.";
             return false;
