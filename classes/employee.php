@@ -2,15 +2,17 @@
 
 class Employee extends AbstractModel{
     protected $table = 'employees';
-    private $id;
+    protected $id;
     private $name;
     private $position;
     private $query;
 
     //Take post
     public function postEmployee(){
-        $this->name = htmlspecialchars($_POST['name']);
+        $this->name = htmlspecialchars($_POST['personel_name']);
         $this->position = htmlspecialchars($_POST['position']);
+        
+        return true;
     }
     
     //Add a new Employee
@@ -18,9 +20,10 @@ class Employee extends AbstractModel{
         if(!$this->postEmployee()){
             return false;
         }
-        $this->query = "INSERT INTO employees(personel_name, position) VALUES (:name, :position)";
+
+        $this->query = "INSERT INTO employees(personel_name, position) VALUES (:personel_name, :position)";
         $stmt = $this->db->prepare($this->query);
-        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':personel_name', $this->name);
         $stmt->bindParam(':position', $this->position);
 
         try{

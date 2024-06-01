@@ -1,5 +1,5 @@
 <?php
-
+include "db.class.php";
 abstract class AbstractModel{
     protected $db;
     protected $table;
@@ -14,6 +14,23 @@ abstract class AbstractModel{
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    public function getOrder(){
+        $stmt = $this->db->prepare("SELECT 
+        o.order_id, 
+        o.amount, 
+        o.order_status,
+        t.table_num,
+        m.product_name        
+        FROM 
+        orders o
+        JOIN
+        masa t ON o.table_id = t.table_id
+        JOIN
+        menu m ON o.product_id = m.menu_id ORDER BY t.table_num ASC");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
     public function getById($id){
         $stmt = $this->db->prepare("SELECT * FROM ". $this->table . " WHERE " . $this->table . "_id=:id"); //table_id , employee_id (tableName . _id)
         $stmt->bindParam(':id', $id);

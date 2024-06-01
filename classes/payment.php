@@ -2,7 +2,7 @@
 class Payment extends AbstractModel{
 
 protected $table = 'payments';
-private $id;
+protected $id;
 private $order_id;
 private $total_price;
 private $payment_status;
@@ -21,16 +21,26 @@ public function getPaymentByOrder($order_id){
 }
 
 // Get payment information for all orders for the table
-public function getPaymentsByTable($table_id){
+public function getPaymentsByTable(){
     $query = 
-    "SELECT p.payment_id, p.order_id, p.total_price, p.payment_status
-    FROM payments p
+    "SELECT 
+    t.table_num,
+    m.product_name,
+    p.payment_status,
+    p.order_id,
+    p.payment_id,
+    SUM(o.amount) AS total_quantity,
+    SUM(p.total_price) AS total_price
+    FROM
+        payments p
     JOIN orders o ON p.order_id = o.order_id
-    WHERE o.table_id = :table_id";
+    JOIN menu m ON o.product_id = m.menu_id
+    JOIN masa t ON o.table_id = t.table_id
+    GROUP BY t.table_num, m.product_name
+    ";
 
     $stmt = $this->db->prepare($query);
-    $stmt->bindParam(':table_id', $table_id);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll();
 }
 }

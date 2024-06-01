@@ -21,7 +21,7 @@ class Database{
             $dsn = "mysql:host=".$this->host.";dbname=".$this->dbname; 
             $this->conn = new PDO($dsn, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
         }catch(PDOException $e){
             throw new Exception("Bağlantı Hatası: " .$e->getMessage());
