@@ -6,16 +6,7 @@ include ("includes/sidebar.php");
 
 $order = new Order();
 
-$filter = isset($_GET['filter']) && $_GET['filter'] == 'pending' ? 'pending' : null;
-$completed = isset($_GET['completed']) && $_GET['completed'] == 'tamamlandı' ? 'tamamlandı' : null;
-$orders = $order->getOrder($filter, $completed);
 ?>
-
-<button type="button" class="btn btn-success m-3" onclick="filterPendingOrders()"><i class="fas fas fa-clock menu-icon"></i>Bekleyen Siparişler</button>
-
-
-<button type="button" class="btn btn-warning m-3" style="float: right;" onclick="filterCompletedOrders()"><i class="fas fa-clock menu-icon"></i> Tamamlanan Siparişler</button>
-
 
 <table id="myTable" class="table table-striped mt-4 text-center">
     <thead>
@@ -30,19 +21,18 @@ $orders = $order->getOrder($filter, $completed);
     </thead>
     <tbody>
         <?php
-            if($orders)
+            if($order->getOrder())
             { 
-                foreach($orders as $order)
+                foreach($order->getOrder() as $order)
                 {
                     ?>
                     <tr>
-                        <td><?php echo $order->order_id ?></td>
-                        <td><?php echo $order->table_num . " Numaralı masa"; ?></td>
-                        <td><?php echo $order->product_name ?></td>
-                        <td><?php echo $order->amount ?></td>
-                        <td><?php echo $order->order_status == 0 ? '<span style="color: green;">Pending</span>' : 'tamamlandı'; ?></td>
+                        <td><?php echo $order->order_id?></td>
+                        <td><?php echo $order->table_num . " Numaralı masa"?></td>
+                        <td><?php echo $order->product_name?></td>
+                        <td><?php echo $order->amount?></td>
+                        <td><?php echo $order->order_status == 0 ? '<span style="color: green;">Pending</span>' : 'Tamamlandı'; ?></td>
                         <td><button type="button" class="btn btn-danger"><i class="fa-solid fa-bell-concierge"></i> Teslim Et</button></td>
-                    </tr>
                     </tr>
                     <?php
                 }
@@ -51,18 +41,7 @@ $orders = $order->getOrder($filter, $completed);
     </tbody>
 </table>
 
-
-
 <script>
-
-function filterPendingOrders() {
-    window.location.href = window.location.pathname + "?filter=pending";
-}
-
-function filterCompletedOrders(){
-    window.location.href = window.location.pathname + "?completed=tamamlandı";
-}
-
 
 $(document).ready(function() {
     $('#myTable').DataTable({

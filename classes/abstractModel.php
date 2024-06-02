@@ -4,6 +4,7 @@ abstract class AbstractModel{
     protected $db;
     protected $table;
     protected $id;
+    protected $query;
 
     public function __construct()
     {
@@ -14,8 +15,8 @@ abstract class AbstractModel{
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    public function getOrder(){
-        $stmt = $this->db->prepare("SELECT 
+    public function getOrder($filter = null, $completed = null){
+        $this->query = "SELECT 
         o.order_id, 
         o.amount, 
         o.order_status,
@@ -26,13 +27,23 @@ abstract class AbstractModel{
         JOIN
         masa t ON o.table_id = t.table_id
         JOIN
-        menu m ON o.product_id = m.menu_id ORDER BY t.table_num ASC");
+        menu m ON o.product_id = m.menu_id";
+        if ($filter == 'pending') 
+        {
+            $this->query .= " WHERE o.order_status = 0 ";
+        }
+        if($completed == 'tamamlandı')
+        {
+            $this->query .= " WHERE o.order_status = 1";
+        }
+        $this->query .= " ORDER BY t.table_num ASC ";
+        $stmt = $this->db->prepare($this->query);
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
-    public function getById($id){
-        $stmt = $this->db->prepare("SELECT * FROM ". $this->table . " WHERE " . $this->table . "_id=:id"); //table_id , employee_id (tableName . _id)
+    public function getById($id, $idcolumn){
+        $stmt = $this->db->prepare("SELECT * FROM ". $this->table . " WHERE " . $idcolumn . "=:id"); //table_id , employee_id (tableName . _id)
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $stmt->fetch();

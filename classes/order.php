@@ -7,7 +7,7 @@ private $table_id;
 private $product_id;
 private $amount;
 private $order_status;
-private $query;
+protected $query;
 
 public function postOrder() {
     $this->table_id = filter_var($_POST['table_id'], FILTER_VALIDATE_INT);

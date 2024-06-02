@@ -65,11 +65,11 @@ $payment = new Payment();
       <div class="modal-body">
           <div class="row">
         <?php
-        foreach($payment->getPaymentsByTable() as $pay)
+        foreach($payment->getById($id, $idcolumn) as $pay)
         {
             ?>
-                    <div class="col-12">Masa Numarası: <?php echo $pay->table_num?></div>
-                    <div class="col-12">Masa Numarası</div>
+                <div class="col-12">Masa Numarası: <?php echo $pay->table_num?></div>
+                    
             <?php
         }
         ?>

@@ -107,20 +107,9 @@
             <li >
                 <a href="odemeler.php" class="main-menu-link" style="color:#66FF99; font-size:large">
                     <i class="fas fas fa-clock menu-icon"></i>
-                    Bekleyen Siparişler
-                </a>
-            </li>
-            <li>
-                <a href="odemeler.php" class="main-menu-link" style="color:#66FF99; font-size:large">
-                    <i class="fas fa-coins menu-icon"></i>
                     Ödemeler
                 </a>
             </li>
-
-
-
-
-
         </ul>
     </div>
 </nav>
