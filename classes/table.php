@@ -6,7 +6,7 @@ class Table extends AbstractModel{
     protected $id;
     private $table_num;
     private $capacity;
-    private $query;
+    protected $query;
     
 
     protected function postTable(){

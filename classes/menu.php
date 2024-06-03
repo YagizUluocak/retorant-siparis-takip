@@ -6,7 +6,7 @@ class Menu extends AbstractModel{
     private $product;
     private $category;
     private $price;
-    private $query;
+    protected $query;
 
     public function postMenu(){
         // Verileri POST isteğinden al ve sanitize et

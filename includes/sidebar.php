@@ -77,6 +77,7 @@
                 </a>
                 <ul class="list-unstyled sub-menu">
                     <li><a href="masa-ekle.php" class="sub-menu-link">Masa Ekle</a></li>
+                    <li><a href="masa-list.php" class="sub-menu-link">Masa Güncelle</a></li>
                     <li><a href="masa-list.php" class="sub-menu-link">Masa Liste</a></li>
                 </ul>
             </li>
@@ -88,19 +89,20 @@
                 </a>
                 <ul class="list-unstyled sub-menu">
                     <li><a href="urun-ekle.php" class="sub-menu-link">Ürün Ekle</a></li>
+                    <li><a href="urun-list.php" class="sub-menu-link">Ürün Güncelle</a></li>
                     <li><a href="urun-list.php" class="sub-menu-link">Ürün Listesi</a></li>
                 </ul>
             </li>
             <li >
-                <a href="siparis-olustur.php" class="main-menu-link">
+                <a href="siparis-olustur.php" class="main-menu-link mt-2">
                     <i class="fas fa-cart-plus menu-icon"></i>
                     Sipariş Oluştur
                 </a>
             </li>
             <li  class="mb-4" >
-                <a href="siparisler.php" class="main-menu-link">
+                <a href="siparisler.php?filter=pending" class="main-menu-link">
                     <i class="fas fa-clipboard-list menu-icon" ></i>
-                    Tüm Siparişler
+                    Siparişler
                 </a>
             </li>
 

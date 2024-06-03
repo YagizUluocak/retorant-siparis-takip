@@ -5,9 +5,25 @@ include ("includes/header.php");
 include ("includes/sidebar.php"); 
 
 $payment = new Payment();
+$filter = isset($_GET['filter']) && $_GET['filter'] == 'odenmemis' ? 'odenmemis' : Null;
+$odenmis = isset($_GET['odenmis']) && $_GET['odenmis'] == 'odendi' ? 'odendi' : NULL;
+$payments = $payment->getPayment($filter, $odenmis);
+if(isset($_GET['islem']) && $_GET['islem'] === 'odemeYap' && isset($_GET['payment_id']))
+{
+    $payment = new Payment();
+    $result = $payment->odemeYap();
 
+    if($result)
+    {
+        echo "<script>window.location.href='odemeler.php?odenmis=odendi';</script>";
+    }
+    else
+    {
+        echo "Bir Hata Oluştu.";
+    }
+}
 ?>
-<button type="button" class="btn btn-success m-3" onclick="filterPendingOrders()"><i class="fas fas fa-clock menu-icon"></i>Geçmiş Ödemeler</button>
+<button type="button" class="btn btn-success m-3" onclick="filterodenmis()"><i class="fas fas fa-clock menu-icon"></i>Geçmiş Ödemeler</button>
 
 
             <table id="myTable" class="table table-striped mt-4 text-center">
@@ -16,34 +32,31 @@ $payment = new Payment();
                         <th>ID</th>
                         <th>Sipariş Numarası</th>
                         <th>Masa Adı</th>
-                       <!-- <th>Ürün Adı</th> -->
-                       <!-- <th>Adet</th> -->
-                       <!-- <th>Toplam Tutar</th> -->
-                        <th>Ödeme Durumu</th> 
-                        <th>Detay</th>
-                        
+                       <th>Ürün Adı</th>
+                       <th>Adet</th>
+                       <th>Toplam Tutar</th>
+                        <th>Ödeme Durumu</th>  
+                        <th>Ödeme Yap</th>                       
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                        if($payment->getPaymentsByTable())
+                        if($payments)
                         { 
-                            foreach($payment->getPaymentsByTable() as $pay)
+                            foreach($payments as $payment)
                             {
                                 ?>
                                 <tr>
-                                    <td><?php echo $pay->payment_id?></td>
-                                    <td><?php echo $pay->order_id?></td>
-                                    <td><?php echo $pay->table_num . " Numaralı masa"?></td>
-                                   <!-- <td><?php echo $pay->product_name?></td> -->
-                                   <!-- <td><?php echo $pay->total_quantity?></td> -->
-                                   <!-- <td><?php echo $pay->total_price?></td> -->
-                                    <td><?php echo $pay->payment_status == 0 ? '<span style="color: green;">Ödenmedi</span>' : 'tamamlandı';?></td> 
-                                    <td>
-                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <i class="fa-solid fa-eye"></i> Detay Gör
-                                        </button>
-                                    </td>
+                                    <td><?php echo $payment->payment_id?></td>
+                                    <td><?php echo $payment->order_id?></td>
+                                    <td><?php echo $payment->table_num . " Numaralı masa"?></td>
+                                   <td><?php echo $payment->product_name?></td>
+                                   <td><?php echo $payment->total_quantity?></td>
+                                   <td><?php echo $payment->total_price?></td>
+                                   <td><?php echo $payment->payment_status?></td>
+                                   
+                                    
+                                    <td><a name= "odemeYap" href="odemeler.php?payment_id=<?php echo $payment->payment_id?>&islem=odemeYap" class="btn btn-warning">Ödeme Yap</a></td>                               
                                 </tr>
                                 <?php
                             }
@@ -54,41 +67,18 @@ $payment = new Payment();
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Ödeme Detayları</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <div class="row">
-        <?php
-        foreach($payment->getPaymentsByTable() as $pay)
-        {
-            ?>
-                    <div class="col-12">Masa Numarası: <?php echo $pay->table_num?></div>
-                    <div class="col-12">Masa Numarası</div>
-            <?php
-        }
-        ?>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
 
 
 <script>
+
+function filterodenmis()
+{
+    window.location.href = window.location.pathname + "?odenmis=odendi";
+}
+function filterOdenmemis()
+{
+    window.location.href = window.location.pathname + "?filter=odenmemis";
+}
 
 const exampleModal = document.getElementById('exampleModal')
 if (exampleModal) {

@@ -92,6 +92,22 @@ public function updateOrder() {
     }
 }
 
+public function siparisTeslim(){
+    $this->id = filter_var($_GET['order_id'], FILTER_VALIDATE_INT);
+
+    $this->query = "UPDATE orders SET order_status = 1 WHERE order_id=:id";
+    $stmt = $this->db->prepare($this->query);
+    $stmt->bindParam(':id', $this->id);
+   
+
+    try {
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Sipariş Güncelleme Sırasında Bir Hata Oluştu: " . $e->getMessage();
+        return false;
+    }
+}
+
 public function getOrderDetailWithPayment() {
     $this->id = filter_var($_GET['order_id'], FILTER_VALIDATE_INT);
     if (!$this->id) {
@@ -99,14 +115,14 @@ public function getOrderDetailWithPayment() {
         return false;
     }
 
-    $query = "
-        SELECT o.order_id, o.table_id, t.table_name, o.product_id, m.product_name, o.amount, o.order_status, 
+    $query = "SELECT o.order_id, o.table_id, t.table_name, o.product_id, m.product_name, o.amount, o.order_status, 
                p.payment_id, p.total_price, p.payment_status 
         FROM orders o 
         JOIN payments p ON o.order_id = p.order_id 
         JOIN tables t ON o.table_id = t.table_id
         JOIN menu m ON o.product_id = m.product_id
         WHERE o.order_id = :order_id
+        
     ";
     $stmt = $this->db->prepare($query);
     $stmt->bindParam(':order_id', $this->id);
@@ -121,8 +137,7 @@ public function getTableOrdersWithPayments() {
         return false;
     }
 
-    $query = "
-        SELECT o.table_id, t.table_name, o.order_id, o.product_id, m.product_name, o.amount, o.order_status,
+    $query = "SELECT o.table_id, t.table_name, o.order_id, o.product_id, m.product_name, o.amount, o.order_status,
                p.payment_id, p.total_price, p.payment_status 
         FROM orders o 
         JOIN payments p ON o.order_id = p.order_id 

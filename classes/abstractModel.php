@@ -15,32 +15,37 @@ abstract class AbstractModel{
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    public function getOrder($filter = null, $completed = null){
-        $this->query = "SELECT 
-        o.order_id, 
-        o.amount, 
-        o.order_status,
-        t.table_num,
-        m.product_name        
-        FROM 
-        orders o
-        JOIN
-        masa t ON o.table_id = t.table_id
-        JOIN
-        menu m ON o.product_id = m.menu_id";
+    public function getOrder($filter = null, $completed = null) {
+        $query = "SELECT 
+                    o.order_id, 
+                    SUM(o.amount) AS amount,
+                    MAX(o.order_status) AS order_status,
+                    t.table_num,
+                    m.product_name
+                FROM 
+                    orders o
+                JOIN
+                    masa t ON o.table_id = t.table_id
+                JOIN
+                    menu m ON o.product_id = m.menu_id";
+    
         if ($filter == 'pending') 
         {
-            $this->query .= " WHERE o.order_status = 0 ";
-        }
-        if($completed == 'tamamlandı')
+            $query .= " WHERE o.order_status = 0 ";
+        } 
+        else if ($completed == 'tamamlandı')
         {
-            $this->query .= " WHERE o.order_status = 1";
+            $query .= " WHERE o.order_status = 1 ";
         }
-        $this->query .= " ORDER BY t.table_num ASC ";
-        $stmt = $this->db->prepare($this->query);
+
+    
+        $query .= " GROUP BY t.table_num, m.product_name";
+    
+        $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    
 
     public function getById($id, $idcolumn){
         $stmt = $this->db->prepare("SELECT * FROM ". $this->table . " WHERE " . $idcolumn . "=:id"); //table_id , employee_id (tableName . _id)
